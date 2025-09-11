@@ -26,3 +26,8 @@ This is the lifecycle of React Application and also the individual components.
 
 
 There are many more hooks.
+
+
+
+> useState : It accepts value that can be anything like number,string,boolean,function,object,symbol etc
+             returns current value of that state and function for updating it.
