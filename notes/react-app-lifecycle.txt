@@ -1,0 +1,28 @@
+# React App lifecycle
+
+> In react when we initially render the page.
+> react will take our components and create DOM nodes out of them.
+> User can interact with these components(DOM nodes)
+> When user interacts with these components. state of page or component changes  (State can be defined as data that changes over time)
+> After state is changed. React re-renders the component or page with new state.
+
+> So when sate changes we update the DOM nodes (virtual DOM). react compares the old virtual DOM and current virtual DOM and 'updates the DOM as required' (updates DOM based on changes)
+> Then we again wait for User interaction
+
+
+This is the lifecycle of React Application and also the individual components.
+
+
+
+# The way all these is managed is using handful of hooks
+
+# Managing UI State
+
+> useState
+> useRef
+> use
+> useReducer
+> useEffect
+
+
+There are many more hooks.
