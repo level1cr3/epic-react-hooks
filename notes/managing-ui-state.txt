@@ -1,0 +1,7 @@
+> by passing state to value property of input. and having onChange function in that input.
+> we can have controlled Inputs.
+
+> we use controlled inputs. when we want to add something to what user has provided. or we want to replace something that user provides 
+with something else
+
+> Basically when we want programmatic way to manipulate something that we receive from users of that input.

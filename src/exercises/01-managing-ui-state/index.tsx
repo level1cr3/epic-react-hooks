@@ -2,7 +2,6 @@ import { generateGradient, getMatchingPosts } from "@/shared/blog-posts";
 import { useState } from "react";
 
 function Exercise() {
-  // 🐨 call useState here and initialize the query with an empty string
   const [query, setQuery] = useState("");
 
   return (
@@ -14,8 +13,10 @@ function Exercise() {
             id="searchInput"
             name="query"
             type="search"
-            // 🐨 add an onChange handler here that calls setQuery with the event.currentTarget.value
-            onChange={(e) => setQuery(e.currentTarget.value)}
+            value={query}
+            onChange={(e) =>
+              setQuery(e.currentTarget.value.replace("dog", "🐶"))
+            }
           />
         </div>
         <div>
@@ -31,7 +32,6 @@ function Exercise() {
         </div>
         <button type="submit">Submit</button>
       </form>
-      {/* 🐨 pass the query state as a prop */}
       <MatchingPosts query={query} />
     </div>
   );
