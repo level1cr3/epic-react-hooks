@@ -4,6 +4,14 @@ import { useState } from "react";
 function Exercise() {
   const [query, setQuery] = useState("");
 
+  const handleCheck = (tag: string, checked: boolean) => {
+    checked
+      ? setQuery(`${query} ${tag}`)
+      : setQuery(query.replace(tag, "").toString());
+    // without trim() it won't work properly because we are passing same string. and useState won't know what changed. trim() gives us brand new string.
+    // or we could use string literal, or toString
+  };
+
   return (
     <div className="app">
       <form>
@@ -14,20 +22,35 @@ function Exercise() {
             name="query"
             type="search"
             value={query}
-            onChange={(e) =>
-              setQuery(e.currentTarget.value.replace("dog", "🐶"))
-            }
+            onChange={(e) => setQuery(e.currentTarget.value)}
           />
         </div>
         <div>
           <label>
-            <input type="checkbox" /> 🐶 dog
+            <input
+              type="checkbox"
+              value="dog"
+              onChange={(e) =>
+                handleCheck(e.currentTarget.value, e.currentTarget.checked)
+              }
+            />{" "}
+            🐶 dog
           </label>
           <label>
-            <input type="checkbox" /> 🐱 cat
+            <input
+              type="checkbox"
+              onChange={(e) => handleCheck("cat", e.currentTarget.checked)}
+            />{" "}
+            🐱 cat
           </label>
           <label>
-            <input type="checkbox" /> 🐛 caterpillar
+            <input
+              type="checkbox"
+              onChange={(e) =>
+                handleCheck("caterpillar", e.currentTarget.checked)
+              }
+            />{" "}
+            🐛 caterpillar
           </label>
         </div>
         <button type="submit">Submit</button>
