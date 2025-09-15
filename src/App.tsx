@@ -1,13 +1,10 @@
-import { useState } from "react";
 import "./App.css";
-import Counter from "./components/Counter";
+import Exercise from "./exercises/01-managing-ui-state";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <Counter />
+      <Exercise />
     </>
   );
 }
