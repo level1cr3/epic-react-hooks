@@ -1,10 +1,14 @@
 import { generateGradient, getMatchingPosts } from "@/shared/blog-posts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-function Exercise() {
+const getQueryPram = () => {
   const params = new URLSearchParams(window.location.search); // in real application router will give us searchParams hook or something like that.
   const initialQuery = params.get("query") ?? ""; // https://localhost:5173/?query=dog+cat    In a URL, the + sign is used to represent a space character when encoding query parameters.
-  const [query, setQuery] = useState(initialQuery);
+  return initialQuery;
+};
+
+function Exercise() {
+  const [query, setQuery] = useState(getQueryPram);
 
   // Driving state from query: currently when typing (dog) in the query checkbox is not getting checked.
   const words = query.split(" ");
@@ -23,10 +27,6 @@ function Exercise() {
     // without trim() it won't work properly because we are passing same string. and useState won't know what changed. trim() gives us brand new string.
     // or we could use string literal, or toString
   };
-
-  useEffect(() => {
-    console.log(params, initialQuery);
-  }, []);
 
   return (
     <div className="app">
@@ -107,3 +107,28 @@ function MatchingPosts({ query }: { query: string }) {
 }
 
 export default Exercise;
+
+/*
+
+**important**
+> Initial callback function: we can use this to set the initial value of our use state.
+
+# why would we want to use initial callback function ?
+>  Imagine be getting initial value is expensive function. and we get that value and pass it to useState.
+> Issue comes when we re-render that component. we are again executing that expensive function even though we only needed it for every first time.  
+ and that is the reason we would use something like initial callback function.
+
+ ex: 
+
+ // bad approach.
+ const initialValue = calculateInitialValue(); // we would be calculating this every time component re-renders. Even though we only need it for initial value.
+ const [val,setVal] = useState(initialValue);
+
+ // good approach
+ const [val,setVal] = useState(()=>{
+  const initialValue = calculateInitialValue();
+  return initialValue
+ });
+
+
+*/
