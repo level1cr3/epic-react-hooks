@@ -1,8 +1,10 @@
 import { generateGradient, getMatchingPosts } from "@/shared/blog-posts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Exercise() {
-  const [query, setQuery] = useState("");
+  const params = new URLSearchParams(window.location.search); // in real application router will give us searchParams hook or something like that.
+  const initialQuery = params.get("query") ?? ""; // https://localhost:5173/?query=dog+cat    In a URL, the + sign is used to represent a space character when encoding query parameters.
+  const [query, setQuery] = useState(initialQuery);
 
   // Driving state from query: currently when typing (dog) in the query checkbox is not getting checked.
   const words = query.split(" ");
@@ -21,6 +23,10 @@ function Exercise() {
     // without trim() it won't work properly because we are passing same string. and useState won't know what changed. trim() gives us brand new string.
     // or we could use string literal, or toString
   };
+
+  useEffect(() => {
+    console.log(params, initialQuery);
+  }, []);
 
   return (
     <div className="app">
