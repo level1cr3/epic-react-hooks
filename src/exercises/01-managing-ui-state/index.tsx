@@ -4,6 +4,16 @@ import { useState } from "react";
 function Exercise() {
   const [query, setQuery] = useState("");
 
+  // Driving state from query: currently when typing (dog) in the query checkbox is not getting checked.
+  const words = query.split(" ");
+  const dogChecked = words.includes("dog");
+  const catChecked = words.includes("cat");
+  const caterpillarChecked = words.includes("caterpillar");
+
+  // try to drive the state if it drivable from other states.
+  // important takeaway : when we are talking about controlled inputs. we don't necessarily have to have the controlled value of that input being result of onchange in that input.
+  // they can also be controlled by state that are being fed on like in our case dogChecked, catChecked, caterpillarChecked.
+
   const handleCheck = (tag: string, checked: boolean) => {
     checked
       ? setQuery(`${query} ${tag}`)
@@ -28,6 +38,7 @@ function Exercise() {
         <div>
           <label>
             <input
+              checked={dogChecked}
               type="checkbox"
               value="dog"
               onChange={(e) =>
@@ -38,6 +49,7 @@ function Exercise() {
           </label>
           <label>
             <input
+              checked={catChecked}
               type="checkbox"
               onChange={(e) => handleCheck("cat", e.currentTarget.checked)}
             />{" "}
@@ -45,6 +57,7 @@ function Exercise() {
           </label>
           <label>
             <input
+              checked={caterpillarChecked}
               type="checkbox"
               onChange={(e) =>
                 handleCheck("caterpillar", e.currentTarget.checked)
