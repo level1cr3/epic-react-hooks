@@ -17,31 +17,25 @@ function Effect() {
   const caterpillarChecked = words.includes("caterpillar");
 
   useEffect(() => {
-    const handlePopState = () => {
-      const queryParams = getQueryParam();
-      setQuery(queryParams); // setting the query to updated queryParams
+    // 🚨 we use this to test whether your cleanup is working
+    const hugeData = new Array(1_000_000).fill(
+      new Array(1_000_000).fill("🐶🐱🐛")
+    );
 
-      // You asked if you can just do:
-      // setQuery(getQueryParam);
-      // This is not equivalent. React’s setState setter has two possible signatures:
-      // setState(value) → sets state directly to that value.
-      // setState(updaterFn) → treats argument as a function (prev) => newState.
-      // So if you do setQuery(getQueryParam), React will think you’re passing an updater function, not the evaluated params.
-      // That means React will call getQueryParam(prevState) with the previous state, which is not what you want unless your getQueryParam happens to accept a parameter and ignore it.
+    const handlePopState = () => {
+      console.log(hugeData);
+
+      console.log("popstate event listener called");
+      setQuery(getQueryParam);
     };
 
     window.addEventListener("popstate", handlePopState);
 
     return () => {
+      console.log("clean up");
       window.removeEventListener("popstate", handlePopState);
     };
   }, []);
-
-  // 🐨 add a useEffect(() => {}, []) call here (we'll talk about that empty array later)
-  // 🐨 in the useEffect callback, subscribe to window's popstate event
-  // 🦉 if that doesn't make sense to you... don't worry, it's supposed to be broken! We'll fix it next
-  // 🐨 your event handler should call setQuery to getQueryParam()
-  // 📜 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 
   function handleCheck(tag: string, checked: boolean) {
     const newWords = checked ? [...words, tag] : words.filter((w) => w !== tag);
