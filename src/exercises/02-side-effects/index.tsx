@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { generateGradient, getMatchingPosts } from "@/shared/blog-posts";
 import { setGlobalSearchParams } from "@/shared/utils";
 
@@ -15,6 +15,27 @@ function Effect() {
   const dogChecked = words.includes("dog");
   const catChecked = words.includes("cat");
   const caterpillarChecked = words.includes("caterpillar");
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const queryParams = getQueryParam();
+      setQuery(queryParams); // setting the query to updated queryParams
+
+      // You asked if you can just do:
+      // setQuery(getQueryParam);
+      // This is not equivalent. React’s setState setter has two possible signatures:
+      // setState(value) → sets state directly to that value.
+      // setState(updaterFn) → treats argument as a function (prev) => newState.
+      // So if you do setQuery(getQueryParam), React will think you’re passing an updater function, not the evaluated params.
+      // That means React will call getQueryParam(prevState) with the previous state, which is not what you want unless your getQueryParam happens to accept a parameter and ignore it.
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // 🐨 add a useEffect(() => {}, []) call here (we'll talk about that empty array later)
   // 🐨 in the useEffect callback, subscribe to window's popstate event
@@ -107,3 +128,13 @@ function MatchingPosts({ query }: { query: string }) {
 }
 
 export default Effect;
+
+/*
+This 1st problem where when click browser back button it removes. some params like out of dog cat. It remove cat. but that is not getting updated in search input.
+'This is something in real application done by 'hooks provided by the router libraries'
+
+
+// when user tries to go back and forward in the web browser that event is called 'popstate' event.
+
+
+*/

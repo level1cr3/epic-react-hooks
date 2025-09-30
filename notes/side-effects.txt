@@ -84,3 +84,80 @@ Ask yourself *“Does my effect start something that keeps running after render?
 * **No** → Skip it.
 
 Would you like me to give you a short “decision checklist” you can quickly glance at when writing `useEffect`?
+
+
+
+
+
+
+
+Perfect — let’s expand this 👌
+
+When your handler depends on props/state (like `getQueryParam`), you need to make sure the **latest values** are used without re-attaching the listener on every render.
+
+There are two main patterns:
+
+---
+
+## 1. **Put dependencies in `useEffect`**
+
+If `getQueryParam` is stable (e.g. memoized with `useCallback`), you can just add it to the dependency array:
+
+```tsx
+useEffect(() => {
+  const handlePopState = () => {
+    setQuery(getQueryParam()); // note the call if it's a function
+  };
+
+  window.addEventListener("popstate", handlePopState);
+
+  return () => {
+    window.removeEventListener("popstate", handlePopState);
+  };
+}, [getQueryParam]); // reattach if getQueryParam changes
+```
+
+This works fine if re-subscribing occasionally is not expensive.
+
+---
+
+## 2. **Use a ref to always access the latest function**
+
+If you don’t want to keep attaching/removing the listener every time `getQueryParam` changes, you can store the function in a ref:
+
+```tsx
+const getQueryParamRef = useRef(getQueryParam);
+
+// keep ref updated with latest version
+useEffect(() => {
+  getQueryParamRef.current = getQueryParam;
+}, [getQueryParam]);
+
+useEffect(() => {
+  const handlePopState = () => {
+    setQuery(getQueryParamRef.current());
+  };
+
+  window.addEventListener("popstate", handlePopState);
+
+  return () => {
+    window.removeEventListener("popstate", handlePopState);
+  };
+}, []); // attach only once
+```
+
+This way:
+
+* Listener is attached only once.
+* Inside the handler, you always call the *latest* `getQueryParam`.
+
+---
+
+👉 Rule of thumb:
+
+* If your dependency is stable or cheap → **option 1** (simple).
+* If your dependency changes often and re-subscribing is wasteful → **option 2 with ref**.
+
+---
+
+Would you like me to show you which one is more “enterprise-grade” best practice for something like query params handling in a React/SPA router setup?
