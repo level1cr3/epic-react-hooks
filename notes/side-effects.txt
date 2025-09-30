@@ -1,0 +1,86 @@
+
+# syntax.
+
+useEffect(() =>{
+  doSomething();
+
+  return () =>{
+    doSomethingCleanup();
+  }
+
+},[dep1, dep2]) 
+ 
+ // we can have multiple useEffect in single component. we should have them case wise?
+ ex: one useEffect handles one case.
+
+> have Everything inside the useEffect. do call function outside of it (you can but don't). 
+Because then you need to lookup. if that function depends on something is that in dependencies array or not ?
+
+ex: your doSomething depend on count value of the state. we should have that count value in dependencies array so doSomething(). get updated
+value whenever it changes.
+
+
+
+
+
+ *important* 
+ > Don't update the state(ex : dep1, dep2) inside the side-effect function. or else you will be stuck in loop.
+ > have cleanup for side-effects. that keeps running (setInterval) or are not closed (WebSocket) or are subscribed to some events (window.addEventListener)
+ 
+ 
+ 
+ 
+ 
+ 
+ # useEffect hook when do we need to have cleanup function? do we need it every time ?
+
+Not every time 👍
+
+The **cleanup function in `useEffect`** is only needed if your effect sets up something that must be torn down when the component unmounts *or* before the effect runs again.
+
+### When you **do need** a cleanup:
+
+* **Subscriptions / event listeners**
+
+  ```tsx
+  useEffect(() => {
+    const handler = () => console.log("resize");
+    window.addEventListener("resize", handler);
+
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  ```
+* **Intervals / timeouts**
+
+  ```tsx
+  useEffect(() => {
+    const id = setInterval(() => console.log("tick"), 1000);
+
+    return () => clearInterval(id);
+  }, []);
+  ```
+* **WebSocket / API connection lifecycle**
+
+  ```tsx
+  useEffect(() => {
+    const ws = new WebSocket("wss://example.com");
+    return () => ws.close();
+  }, []);
+  ```
+* **External library init/teardown** (e.g. map, chart, drag-drop library)
+
+### When you **don’t need** a cleanup:
+
+* One-time API calls (just `fetch` → set state).
+* Pure computations that don’t leave anything running behind.
+* DOM updates that React can handle automatically.
+
+---
+
+👉 Rule of thumb:
+Ask yourself *“Does my effect start something that keeps running after render?”*
+
+* **Yes** → Add a cleanup.
+* **No** → Skip it.
+
+Would you like me to give you a short “decision checklist” you can quickly glance at when writing `useEffect`?
