@@ -1,10 +1,10 @@
 import "./App.css";
-import Exercise from "./exercises/01-managing-ui-state";
+import Effect from "./exercises/02-side-effects";
 
 function App() {
   return (
     <>
-      <Exercise />
+      <Effect />
     </>
   );
 }
