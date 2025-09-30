@@ -1,21 +1,14 @@
-import { useState } from "react";
 import "./App.css";
-import Effect from "./exercises/02-side-effects";
+import { Form, MatchingPosts } from "./exercises/03-lifting-state";
 
 function App() {
-  const [showForm, setShowForm] = useState(true);
-
+  // 🐨 add the useState for the query here (lift it up from the Form)
   return (
-    <div>
-      <label>
-        <input
-          type="checkbox"
-          checked={showForm}
-          onChange={(e) => setShowForm(e.currentTarget.checked)}
-        />{" "}
-        show form
-      </label>
-      {showForm ? <Effect /> : null}
+    <div className="app">
+      {/* 🐨 pass the query and setQuery to the form */}
+      <Form />
+      {/* 🐨 pass the query to this prop */}
+      <MatchingPosts query="" />
     </div>
   );
 }
